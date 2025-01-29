@@ -11,7 +11,7 @@
 - Run le linter et formatteur (Commit les changement si besoin)
 - Run les tests
 - Build le dossier de prod (Dossier dist)
-- Recupère le dossier dist 
+- Recupère le dossier dist
 - Deploie les sources sur Github Action
 
 ## Tips
