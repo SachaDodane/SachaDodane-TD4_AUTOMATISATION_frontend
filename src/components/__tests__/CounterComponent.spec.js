@@ -1,39 +1,63 @@
-import { describe, it, expect, vi } from 'vitest'
-
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createTestingPinia } from '@pinia/testing'
-import Counter from '../CounterComponent.vue'
-import { useCounterStore } from '@/stores/counter'
+import { createPinia, setActivePinia } from 'pinia'
+import CounterComponent from '../CounterComponent.vue'
 
-function mountCounter(x = 0) {
-  const wrapper = mount(Counter, {
-    global: {
-      plugins: [
-        createTestingPinia({
-          createSpy: vi.fn,
-          initialState: {
-            counter: { count: x }
-          }
-        })
-      ]
-    }
+describe('CounterComponent', () => {
+  it('mounts properly', () => {
+    setActivePinia(createPinia())
+    const wrapper = mount(CounterComponent)
+    expect(wrapper.exists()).toBe(true)
   })
-  return wrapper
-}
 
-describe('Counter', () => {
-  it('renders properly', () => {
-    const wrapper = mountCounter(50)
-    expect(wrapper.text()).toContain('Counter: 50')
+  it('displays initial counter value', () => {
+    setActivePinia(createPinia())
+    const wrapper = mount(CounterComponent)
+    expect(wrapper.find('#counter').text()).toBe('0')
   })
-  describe('Clicks', () => {
-    it('increments counter', async () => {
-      const wrapper = mountCounter(50)
-      const counterStore = useCounterStore()
-      await wrapper.find('button[id=increment]').trigger('click')
-      expect(counterStore.increment).toHaveBeenCalledTimes(1)
-    })
-    it('decrements counter', async () => {
-    })
+
+  it('increments counter when increment button is clicked', async () => {
+    setActivePinia(createPinia())
+    const wrapper = mount(CounterComponent)
+    await wrapper.find('#increment').trigger('click')
+    expect(wrapper.find('#counter').text()).toBe('1')
+  })
+
+  it('decrements counter when decrement button is clicked', async () => {
+    setActivePinia(createPinia())
+    const wrapper = mount(CounterComponent)
+    await wrapper.find('#decrement').trigger('click')
+    expect(wrapper.find('#counter').text()).toBe('-1')
+  })
+
+  it('handles multiple clicks correctly', async () => {
+    setActivePinia(createPinia())
+    const wrapper = mount(CounterComponent)
+
+    await wrapper.find('#increment').trigger('click')
+    await wrapper.find('#increment').trigger('click')
+    await wrapper.find('#decrement').trigger('click')
+
+    expect(wrapper.find('#counter').text()).toBe('1')
+  })
+
+  it('renders buttons with correct text', () => {
+    setActivePinia(createPinia())
+    const wrapper = mount(CounterComponent)
+
+    expect(wrapper.find('#increment').text()).toBe('Increment')
+    expect(wrapper.find('#decrement').text()).toBe('Decrement')
+  })
+
+  it('updates store value correctly', async () => {
+    const pinia = createPinia()
+    setActivePinia(pinia)
+    const wrapper = mount(CounterComponent)
+
+    await wrapper.find('#increment').trigger('click')
+    await wrapper.find('#increment').trigger('click')
+
+    const store = wrapper.vm.counterStore
+    expect(store.count).toBe(2)
   })
 })
