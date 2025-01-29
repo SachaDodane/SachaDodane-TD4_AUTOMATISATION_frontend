@@ -1,17 +1,41 @@
+import { describe, it, expect, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { describe, it, beforeEach } from 'vitest'
+import { useCounterStore } from '../counter'
 
 describe('Counter Store', () => {
   beforeEach(() => {
-    // creates a fresh pinia and makes it active
-    // so it's automatically picked up by any useStore() call
-    // without having to pass it to it: `useStore(pinia)`
     setActivePinia(createPinia())
   })
 
-  it('increments', () => {
+  it('should initialize with count 0', () => {
+    const store = useCounterStore()
+    expect(store.count).toBe(0)
   })
 
-  it('decrements', () => {
+  it('should increment count', () => {
+    const store = useCounterStore()
+    store.increment()
+    expect(store.count).toBe(1)
+  })
+
+  it('should decrement count', () => {
+    const store = useCounterStore()
+    store.decrement()
+    expect(store.count).toBe(-1)
+  })
+
+  it('should handle multiple operations', () => {
+    const store = useCounterStore()
+    store.increment()
+    store.increment()
+    store.decrement()
+    expect(store.count).toBe(1)
+  })
+
+  it('should allow negative numbers', () => {
+    const store = useCounterStore()
+    store.decrement()
+    store.decrement()
+    expect(store.count).toBe(-2)
   })
 })
