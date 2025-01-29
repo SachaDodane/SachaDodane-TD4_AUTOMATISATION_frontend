@@ -6,7 +6,7 @@
 
 ## Creation d'un workflow
 
-Créer un workflow github action qui :
+[x] Créer un workflow github action qui :
 
 - Run le linter et formatteur (Commit les changement si besoin)
 - Run les tests
