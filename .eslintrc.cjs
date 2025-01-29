@@ -12,11 +12,16 @@ module.exports = {
     {
       files: ['cypress/e2e/**/*.{cy,spec}.{js,ts,jsx,tsx}', 'cypress/support/**/*.{js,ts,jsx,tsx}'],
       extends: ['plugin:cypress/recommended']
+    },
+    {
+      files: ['**/*.{vue,js,jsx,cjs,mjs}'],
+      rules: {
+        'vue/multi-word-component-names': 'off'
+      }
     }
   ],
   parserOptions: {
     ecmaVersion: 'latest'
   },
-  ignorePatterns: ['dist/**', 'coverage/**', 'node_modules/**'],
-  files: ['**/*.{vue,js,jsx,cjs,mjs}']
+  ignorePatterns: ['dist/**', 'coverage/**', 'node_modules/**']
 }
