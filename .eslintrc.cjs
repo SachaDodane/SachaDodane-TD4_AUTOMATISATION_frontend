@@ -16,5 +16,7 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 'latest'
-  }
+  },
+  ignorePatterns: ['dist/**', 'coverage/**', 'node_modules/**'],
+  files: ['**/*.{vue,js,jsx,cjs,mjs}']
 }
